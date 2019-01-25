@@ -20,7 +20,7 @@ from picamera.array import PiRGBArray
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 
 # TODO: Declare path to face cascade
-CASCADE_PATH = ""
+CASCADE_PATH = "/home/pi/opencv-2.4.13.4/data/haarcascades/haarcascade_frontalface_default.xml"
 
 
 def request_from_server(img):
@@ -31,7 +31,7 @@ def request_from_server(img):
     :returns: Returns a dictionary containing label and cofidence.
     """
     # URL or PUBLIC DNS to your server
-    URL = ""
+    URL = "ec2-35-165-9-225.us-west-2.compute.amazonaws.com"
 
     # File name so that it can be temporarily stored.
     temp_image_name = 'temp.jpg'
@@ -100,10 +100,12 @@ def main():
                 print('Let\'s see who you are...')
 
                 # TODO: Get label and confidence using request_from_server
-
+                cropped_image = image[x+(w/2)-84:x+(w/2)+84, y+(h/2)-96:y+(h/2)+96]
+                label = request_from_server(cropped_image)
                 print('New result found!')
 
                 # TODO: Display label on face image
+                cv2.putText(img, label, (10, 500), font, 4, (255, 255, 255))
                 # Save what you want to write on image to 'result_to_display'
                 # [OPTIONAL]: At this point you only have a number to display,
                 # you could add some extra code to convert your number to a
