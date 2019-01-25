@@ -25,7 +25,7 @@ app = Flask(__name__)
 CORS(app)                               # Allow CORS (Cross Origin Requests)
 
 # TODO: Load the model from the weights file.
-MODEL =  model.load('my_model.h5')_
+MODEL =  model.load('my_model.h5')
 
 
 def classify(path_to_image):
@@ -55,22 +55,22 @@ def classify(path_to_image):
     # TODO: Use network to predict the 'image_to_be_classified' and
     # get an array of prediction values
     # Note: MODEL.predict() returns an array of arrays ie. [[classes]]
-    predictions =  # ______
+    predictions =  model.predict(image_to_be_classified)
 
     # TODO: Get the predicted label which is defined as follows:
     # Label = the index of the largest value in the prediction array
     # This label is a number, which corresponds to the same number you
     # give to the folder when you organized data
     # Hint: np.argmax
-    label =  # ________
+    label =  np.argmax(predictions)
 
     # TODO: Calculate confidence according to the following metric:
     # Confidence = prediction_value / sum(all_prediction_values)
     # Be sure to call your confidence value 'conf'
     # Hint: np.sum()
-    label_value =  # _______
-    total =  # _________
-    conf =  # __________
+    label_value =  prediction[label]
+    total = np.sum(predictions)
+    conf = label_value/total
 
     prediction = {'label': str(label),
                   'confidence': float(conf)}

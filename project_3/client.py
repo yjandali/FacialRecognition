@@ -20,7 +20,7 @@ from picamera.array import PiRGBArray
 FONT = cv2.FONT_HERSHEY_SIMPLEX
 
 # TODO: Declare path to face cascade
-CASCADE_PATH = "/home/pi/opencv-2.4.13.4/data/haarcascades/haarcascade_frontalface_default.xml"
+CASCADE_PATH = '/home/pi/opencv-2.4.13.4/data/haarcascades/haarcascade_frontalface_default.xml'
 
 
 def request_from_server(img):
@@ -31,13 +31,14 @@ def request_from_server(img):
     :returns: Returns a dictionary containing label and cofidence.
     """
     # URL or PUBLIC DNS to your server
-    URL = "ec2-35-165-9-225.us-west-2.compute.amazonaws.com"
+    URL = "http://ec2-35-165-9-225.us-west-2.compute.amazonaws.com"
 
     # File name so that it can be temporarily stored.
     temp_image_name = 'temp.jpg'
 
     # TODO:DONE  Save image with name stored in 'temp_image_name'
     cv2.imwrite(temp_image_name, img)
+
     # Reopen image and encode in base64
     # Open binary file in read mode
     image = open(temp_image_name, 'rb')
@@ -82,17 +83,16 @@ def main():
         # Get image array from frame
         frame = frame.array
         img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-        # TODO:DONE  Use face detector to get faces.
+        # TODO:DONE  Use face detector to get faces
         # Be sure to save the faces in a variable called 'faces'
         faces = face_cascade.detectMultiScale(img, 1.3, 5)
+        
         for (x, y, w, h) in faces:
             print('==================================')
             print('Face detected!')
             cv2.imshow('Face Image for Classification', frame)
 
             # Keep showing image until a key is pressed
-            cv2.waitKey()
             answer = input('Confirm image (1-yes / 0-no): ')
             print('==================================')
 
@@ -100,8 +100,11 @@ def main():
                 print('Let\'s see who you are...')
 
                 # TODO: Get label and confidence using request_from_server
-                cropped_image = image[x+(w/2)-84:x+(w/2)+84, y+(h/2)-96:y+(h/2)+96]
-                label = request_from_server(cropped_image)
+                cropped_image = img[x+(w/2)-84:x+(w/2)+84, y+(h/2)-96:y+(h/2)+96]
+                print("image has been cropped")
+                serverResponse = request_from_server(cropped_image)
+                print("server response received")
+                label = serverResponse["confidence"]
                 print('New result found!')
 
                 # TODO: Display label on face image
@@ -117,10 +120,13 @@ def main():
                 break
 
         # Delete image in variable so we can get the next frame
+        key = cv2.waitKey(1) & 0xFF
         rawCapture.truncate(0)
+        if key == ord("q"):
+            break
 
-        print('Waiting for image...')
-        time.sleep(1)
+        print('Waiting for image...')      
+        time.sleep(0.5)
 
 
 # Runs main if this file is run directly
