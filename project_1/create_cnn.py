@@ -1,3 +1,4 @@
+
 """
 ECE196 Face Recognition Project
 Author: W Chen
@@ -42,18 +43,27 @@ Modify this code to write a LeNet with the following requirements:
     output 10-dimensional vector (This is specified through units.)
 """
 # TODO: Import other layers as necessary. (Conv2D, MaxPooling2D)
+
 from keras.layers import Input, Dense
 from keras.models import Model
+from keras.layers.convolutional  import Conv2D
+from keras.layers.pooling import MaxPooling2D
 
 # TODO: Currently, sets input dimension to be 784x1. Change to 32x32x1
-inputs = Input(shape=(784,))
+inputs = Input(shape=(32,32,1))
 
 # A layer instance is callable on a tensor, and returns a tensor
-x = Dense(64, activation='relu')(inputs)
-x = Dense(64, activation='relu')(x)
-predictions = Dense(10, activation='softmax')(x)
+# This createa a model that includes the Input layer and three Dense layers
+conv1 = Conv2D(6, 5, activation='sigmoid')(inputs)
+pool2 = MaxPooling2D(pool_size=(2, 2),strides=2)(conv1)
+conv3 = Conv2D(16, kernel_size=(5, 5), activation='sigmoid')(pool2)
+pool4 = MaxPooling2D(pool_size=(2, 2),strides=(2,2))(conv3)
+conv5 = Conv2D(120, kernel_size=(5, 5), activation='sigmoid')(pool4)
 
-# This creates a model that includes the Input layer and three Dense layers
+F6 = Dense(84,activation='tanh')(conv5)
+F7 = Dense(10,activation='softmax')(F6)
+predictions = F7 
+
 model = Model(inputs=inputs, outputs=predictions)
 
 # Prints model architecture

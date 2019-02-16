@@ -22,11 +22,11 @@ import random
 
 IMG_H, IMG_W, NUM_CHANNELS = 224, 224, 3
 MEAN_PIXEL = np.array([104., 117., 123.]).reshape((1, 1, 3))
-TRAIN_DIR = '../Pictures/Train'  # done
-VAL_DIR = '../Pictures/Validation'  # done
-NUM_EPOCHS = 1  # TODO maybe? 
+TRAIN_DIR = '../Faces/Train/'  # done
+VAL_DIR = '../Faces/Validate/'  # done
+NUM_EPOCHS = 5  # TODO maybe? 
 BATCH_SIZE = 16
-NUM_CLASSES = 41  # TODO IS this right??? 
+NUM_CLASSES = 19  # TODO IS this right??? 
 
 
 def load_model():
@@ -93,9 +93,9 @@ def main():
     # read train and validation data and train the model for n epochs
     print 'Load train data:'
     X_train, Y_train = load_data(TRAIN_DIR)
-    model.fit(x=None,y=None,batch_size = None, epochs =1, verbose=1)
     print 'Load val data:'
     X_val, Y_val = load_data(VAL_DIR)
+    model.fit(x=X_train,y=Y_train, batch_size = BATCH_SIZE, epochs =NUM_EPOCHS, verbose=1, validation_data=(X_val, Y_val))
     # TODO: Train model
     model = load_model()
     # TODO: Save model weights
