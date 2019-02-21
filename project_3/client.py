@@ -36,8 +36,8 @@ def request_from_server(img):
     # File name so that it can be temporarily stored.
     temp_image_name = 'temp.jpg'
 
-    # TODO: Save image with name stored in 'temp_image_name'
-
+    # TODO:DONE  Save image with name stored in 'temp_image_name'
+    cv2.imwrite(temp_image_name, img)
     # Reopen image and encode in base64
     # Open binary file in read mode
     image = open(temp_image_name, 'rb')
@@ -59,7 +59,7 @@ def request_from_server(img):
 def main():
     # 1. Start running the camera.
     # TODO: Initialize face detector
-
+    face_cascade = cv2.CascadeClassifier(CASCADE_PATH)
     # Initialize camera and update parameters
     camera = PiCamera()
     width = 640
@@ -83,9 +83,9 @@ def main():
         frame = frame.array
         img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # TODO: Use face detector to get faces.
+        # TODO:DONE  Use face detector to get faces.
         # Be sure to save the faces in a variable called 'faces'
-
+        faces = face_cascade.detectMultiScale(img, 1.3, 5)
         for (x, y, w, h) in faces:
             print('==================================')
             print('Face detected!')

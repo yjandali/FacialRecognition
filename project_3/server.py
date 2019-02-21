@@ -25,7 +25,7 @@ app = Flask(__name__)
 CORS(app)                               # Allow CORS (Cross Origin Requests)
 
 # TODO: Load the model from the weights file.
-MODEL =  # _______
+MODEL =  model.load('my_model.h5')_
 
 
 def classify(path_to_image):
@@ -42,12 +42,12 @@ def classify(path_to_image):
     mean_pixel = np.array([104., 117., 123.]).reshape((1, 1, 3))
 
     # TODO: Use opencv to read and resize image to standard dimensions
-    img =  # ______
-    resized_img =  # ______
+    img =  cv2.imread(path_to_image)
+    resized_img =  cv2.resize(img, img_height, img_width)
 
-    # TODO: Subtract mean_pixel from the image store the new image in
+    # TODO: Subtract mean_pixel from the image, store the new image in
     # a variable called 'normalized_image'
-    normalized_image =  # ________
+    normalized_image =  resized_img - mean_pixel
 
     # Turns image shape of (2,) to (1,2)
     image_to_be_classified = np.expand_dims(normalized_image, axis=0)
